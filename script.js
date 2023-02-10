@@ -2,11 +2,11 @@ const img = document.querySelector(".item1");
 const btn = document.querySelector(".arrow");
 let libraryArr = [];
 let queueArr = [];
-let id = "Banana";
+let id = "Kiwi";
 let addToLibrary = (id) => {
   let parsedLibrary = JSON.parse(localStorage.getItem("library"));
 
-  if (libraryArr.includes(id)) {
+  if (libraryArr.includes(id) || id === "") {
     return;
   } else if (libraryArr.length <= 0 && parsedLibrary !== null) {
     parsedLibrary.forEach((element) => {
@@ -20,18 +20,36 @@ let addToLibrary = (id) => {
   } else {
     libraryArr.unshift(id);
   }
-  console.log(parsedLibrary);
-  console.log(libraryArr);
+  localStorage.setItem("library", JSON.stringify(libraryArr));
+  // console.log(parsedLibrary);
+  // console.log(libraryArr);
 };
 
-let addToQueue = () => {
-  queueArr.unshift(movieId);
+let addToQueue = (id) => {
+  let parsedQueue = JSON.parse(localStorage.getItem("queue"));
+
+  if (queueArr.includes(id) || id === "") {
+    return;
+  } else if (queueArr.length <= 0 && parsedQueue !== null) {
+    parsedQueue.forEach((element) => {
+      queueArr.unshift(element);
+    });
+    if (queueArr.includes(id)) {
+      return;
+    } else {
+      queueArr.unshift(id);
+    }
+  } else {
+    queueArr.unshift(id);
+  }
   localStorage.setItem("queue", JSON.stringify(queueArr));
+  // console.log(parsedLibrary);
+  // console.log(libraryArr);
 };
 
 btn.addEventListener("click", () => {
   addToLibrary(id);
-  localStorage.setItem("library", JSON.stringify(libraryArr));
+  addToQueue(id);
   img.classList.toggle("hide");
   btn.classList.toggle("arrowRotate");
 });
